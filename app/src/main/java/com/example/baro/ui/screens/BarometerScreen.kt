@@ -26,9 +26,13 @@ import android.hardware.Sensor
 import android.hardware.SensorEventListener
 import android.hardware.SensorEvent
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import com.example.baro.ui.components.RefreshButton
+import com.example.baro.R
 import java.util.Locale
 
 @Composable
@@ -76,6 +80,10 @@ fun BarometerScreen(navController: NavHostController) {
         ) {
             SwitchButton(navController = navController)
             Text(text = "Barometer", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+            Icon(painter = painterResource(
+                id = R.drawable.barometer),
+                contentDescription = "barometer",
+                modifier = Modifier.size(32.dp))
             RefreshButton(onRefresh = { refreshSensorReading() })
         }
 

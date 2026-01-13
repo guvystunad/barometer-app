@@ -12,3 +12,8 @@ A simple, aviation-inspired Android app for measuring atmospheric pressure and a
 - Android 7.0 (API 24) or higher
 - Device with barometer sensor (pressure sensor)
 - Location permission
+
+## Icons
+
+- <a href="https://www.flaticon.com/free-icons/rocky-mountains" title="rocky mountains icons">Rocky mountains icons created by Pop Vectors - Flaticon</a>
+- <a href="https://www.flaticon.com/free-icons/barometer" title="barometer icons">Barometer icons created by Those Icons - Flaticon</a>

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,9 @@ import com.example.baro.ui.components.SwitchButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import com.example.baro.R
+import androidx.compose.foundation.layout.size
 import kotlin.math.pow
 import java.util.Locale
 @Composable
@@ -77,6 +81,10 @@ fun AltimeterScreen(navController: NavHostController) {
         ) {
             SwitchButton(navController = navController)
             Text(text = "Altimeter", fontSize = 32.sp, fontWeight = FontWeight.Bold)
+            Icon(painter = painterResource(
+                id = R.drawable.mountain),
+                contentDescription = "mountain",
+                modifier = Modifier.size(32.dp))
             RefreshButton(onRefresh = { refreshSensorReading() })
         }
         Column(

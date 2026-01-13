@@ -15,6 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.painterResource
+import com.example.baro.R
+
 
 @Composable
 fun SwitchButton(
@@ -27,17 +30,17 @@ fun SwitchButton(
     val (destination, icon, description) = when (currentRoute) {
         "barometer" -> Triple(
             "altimeter",
-            Icons.Default.KeyboardArrowLeft,
+            R.drawable.mountain,
             "Switch to Altimeter"
         )
         "altimeter" -> Triple(
             "barometer",
-            Icons.Default.KeyboardArrowRight,
+            R.drawable.barometer,
             "Switch to Barometer"
         )
         else -> Triple(
             "barometer",
-            Icons.Default.KeyboardArrowLeft,
+            R.drawable.barometer,
             "Default switch"
         )
     }
@@ -56,9 +59,8 @@ fun SwitchButton(
             .background(Color.White, RoundedCornerShape(8.dp))
     ) {
         Icon(
-            imageVector = icon,
-            contentDescription = description,
-            tint = Color.Black
+            painter = painterResource(id = icon),
+            contentDescription = description
         )
     }
 }

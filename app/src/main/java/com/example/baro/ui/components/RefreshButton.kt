@@ -18,6 +18,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
+import com.example.baro.R
 
 @Composable
 fun RefreshButton(
@@ -43,9 +45,8 @@ fun RefreshButton(
             .background(Color.White, RoundedCornerShape(8.dp))
     ) {
         Icon(
-            imageVector = Icons.Default.Refresh,
+            painter = painterResource(id = R.drawable.reload),
             contentDescription = "Refresh the reading",
-            tint = Color.Black,
             modifier = Modifier.rotate(rotation)
         )
     }
