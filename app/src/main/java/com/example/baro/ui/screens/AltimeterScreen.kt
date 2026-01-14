@@ -19,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -33,14 +32,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.baro.R
 import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
+import com.example.baro.ui.components.UnitPicker
+import com.example.baro.ui.components.UnitSystem
 import kotlin.math.pow
 import java.util.Locale
 @Composable
-fun AltimeterScreen(navController: NavHostController) {
+fun AltimeterScreen(
+    navController: NavHostController,
+    selectedUnit: UnitSystem,
+    onUnitChange: (UnitSystem) -> Unit
+) {
     val context = LocalContext.current
 
     var currentAltitude by remember { mutableStateOf(0f) }
     var isReading by remember { mutableStateOf(false) }
+    var selectedUnit = selectedUnit//by remember { mutableStateOf(UnitSystem.EU) }
 
     val seaLevelPressure = 1013.25f
 
@@ -68,9 +75,21 @@ fun AltimeterScreen(navController: NavHostController) {
             sensorManager.registerListener(listener, it, SensorManager.SENSOR_DELAY_FASTEST)
         }
     }
+
     LaunchedEffect(Unit) {
         refreshSensorReading()
     }
+
+    val displayAltitude = when (selectedUnit) {
+        UnitSystem.EU -> currentAltitude
+        UnitSystem.US -> currentAltitude * 3.28084f
+    }
+
+    val unitLabel = when (selectedUnit) {
+        UnitSystem.EU -> "meters"
+        UnitSystem.US -> "feet"
+    }
+
     Box(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
@@ -95,14 +114,14 @@ fun AltimeterScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "meters",
+                text = unitLabel,
                 fontSize = 48.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color(0xFF4A5DB8)
             )
             Text(
                 text = if (currentAltitude != 0f || isReading) {
-                    String.format(Locale.US, "%.0f", currentAltitude)
+                    String.format(Locale.US, "%.0f", displayAltitude)
                 } else {
                     "---"
                 },
@@ -117,5 +136,11 @@ fun AltimeterScreen(navController: NavHostController) {
                 color = Color.Gray
             )
         }
+        UnitPicker(
+            selectedUnit = selectedUnit,
+            onUnitChange = onUnitChange,
+            modifier = Modifier
+                .align(Alignment.BottomCenter).padding(bottom = 16.dp)
+        )
     }
 }

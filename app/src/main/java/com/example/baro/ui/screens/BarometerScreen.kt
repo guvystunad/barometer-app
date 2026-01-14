@@ -33,14 +33,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.baro.ui.components.RefreshButton
 import com.example.baro.R
+import com.example.baro.ui.components.UnitPicker
+import com.example.baro.ui.components.UnitSystem
 import java.util.Locale
 
 @Composable
-fun BarometerScreen(navController: NavHostController) {
+fun BarometerScreen(
+    navController: NavHostController,
+    selectedUnit: UnitSystem,
+    onUnitChange: (UnitSystem) -> Unit
+) {
     val context = LocalContext.current
 
     var currentPressure by remember { mutableStateOf(0f) }
     var isReading by remember { mutableStateOf(false) }
+    var selectedUnit = selectedUnit//by remember { mutableStateOf(UnitSystem.EU) }
 
     fun refreshSensorReading() {
         val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -51,7 +58,7 @@ fun BarometerScreen(navController: NavHostController) {
                 event?.let {
                     if (it.sensor.type == Sensor.TYPE_PRESSURE) {
                         val pressureHPa = it.values[0]
-                        currentPressure = pressureHPa * 0.02953f
+                        currentPressure = pressureHPa
                         isReading = false
                         sensorManager.unregisterListener(this)
                     }
@@ -68,6 +75,16 @@ fun BarometerScreen(navController: NavHostController) {
 
     LaunchedEffect(Unit) {
         refreshSensorReading()
+    }
+
+    val displayPressure = when (selectedUnit) {
+        UnitSystem.EU -> currentPressure * 0.750062f
+        UnitSystem.US -> currentPressure * 0.02953f
+    }
+
+    val unitLabel = when (selectedUnit) {
+        UnitSystem.EU -> "mmHg"
+        UnitSystem.US -> "inHg"
     }
 
     Box(
@@ -95,7 +112,7 @@ fun BarometerScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "inHg",
+                text = unitLabel,
                 fontSize = 48.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color(0xFF4A5DB8)
@@ -103,7 +120,7 @@ fun BarometerScreen(navController: NavHostController) {
 
             Text(
                 text = if (currentPressure > 0f) {
-                    String.format(Locale.US, "%.1f", currentPressure).replace(".", ",")
+                    String.format(Locale.US, "%.1f", displayPressure).replace(".", ",")
                 } else {
                     if (isReading) "Reading..." else "---"
                 },
@@ -112,5 +129,12 @@ fun BarometerScreen(navController: NavHostController) {
                 color = Color(0xFF4A5DB8)
             )
         }
+        UnitPicker(
+            selectedUnit = selectedUnit,
+            onUnitChange = onUnitChange,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 16.dp)
+        )
     }
 }
